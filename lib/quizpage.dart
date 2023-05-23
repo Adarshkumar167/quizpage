@@ -1,14 +1,107 @@
 import 'package:flutter/material.dart';
+import 'package:quizpage/optionsbutton.dart';
+import 'package:quizpage/submit.dart';
+import 'package:quizpage/timer.dart';
 
 class QuizPage extends StatefulWidget {
-  const QuizPage({super.key});
+  const QuizPage({Key? key}) : super(key: key);
 
   @override
   State<QuizPage> createState() => _QuizPageState();
 }
 
+class Question {
+  final int id;
+  final String question;
+  final List<String> options;
+  final String correctAnswer;
+
+  Question({
+    required this.id,
+    required this.question,
+    required this.options,
+    required this.correctAnswer,
+  });
+}
+
 class _QuizPageState extends State<QuizPage> {
-  final selectedNumber = 2;
+  var selectedNumber = 1;
+  bool _isBookmarked = false;
+
+  final List<Question> questions = [
+    Question(
+      id: 1,
+      question:
+          'Which of the following is the fastest means of transportation?',
+      options: ['Roadways', 'Airways', 'Waterways', 'Railways'],
+      correctAnswer: 'Airways',
+    ),
+    Question(
+      id: 2,
+      question: 'Which is the tallest building on the Earth?',
+      options: [
+        'Burj Khalifa',
+        'Shanghai Tower',
+        'Merdeka',
+        'Lotte World Tower',
+      ],
+      correctAnswer: 'Burj Khalifa',
+    ),
+    Question(
+      id: 3,
+      question: 'Which is the largest country by area?',
+      options: ['Canada', 'Russia', 'China', 'India'],
+      correctAnswer: 'Russia',
+    ),
+    Question(
+      id: 4,
+      question: 'What Does the Heart Pump?',
+      options: ['Water', 'Saliva', 'Blood', 'Oxygen'],
+      correctAnswer: 'Blood',
+    ),
+    Question(
+      id: 5,
+      question: 'In which country is the Eiffel Tower located?',
+      options: ['France', 'UAE', 'Rome', 'Mexico'],
+      correctAnswer: 'France',
+    ),
+    Question(
+      id: 6,
+      question: 'Who Invented the Light Bulb?',
+      options: [
+        'Michael Faraday',
+        'Charles Babbage',
+        'Taylor Swift',
+        'Thomas Alva Edison',
+      ],
+      correctAnswer: 'Thomas Alva Edison',
+    ),
+    Question(
+      id: 7,
+      question: 'Who discovered zero?',
+      options: ['Aryabhatt', 'Vedvyas', 'Maharshi Panini', 'None of these'],
+      correctAnswer: 'Aryabhatt',
+    ),
+    Question(
+      id: 8,
+      question: '10×10+5 is equal to?',
+      options: ['25', '150', '105', '125'],
+      correctAnswer: '105',
+    ),
+    Question(
+      id: 9,
+      question: 'What is the face value of 8 in 48123?',
+      options: ['8', '80', '800', '8000'],
+      correctAnswer: '8',
+    ),
+    Question(
+      id: 10,
+      question: 'What is the place value of 8 in 48123?',
+      options: ['8', '80', '800', '8000'],
+      correctAnswer: '8000',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,45 +117,19 @@ class _QuizPageState extends State<QuizPage> {
           ),
         ),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             const Icon(
               Icons.pause_circle_filled_rounded,
               color: Color.fromRGBO(196, 196, 196, 1),
             ),
             SizedBox(width: MediaQuery.of(context).size.width * 0.01),
-            const Text(
-              '09:05',
-              style: TextStyle(
-                  fontSize: 16,
-                  color: Color.fromRGBO(196, 196, 196, 1),
-                  fontWeight: FontWeight.bold),
-            ),
+            const Time(),
           ],
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.only(
-                right: MediaQuery.of(context).size.width * 0.05),
-            child: OutlinedButton(
-              style: ButtonStyle(
-                fixedSize: MaterialStateProperty.all(const Size(100, 40)),
-                side: MaterialStateProperty.all(
-                  const BorderSide(
-                    color: Color.fromRGBO(73, 229, 234, 1.0),
-                  ),
-                ),
-              ),
-              onPressed: () {},
-              child: const Text(
-                'Submit',
-                style: TextStyle(
-                  color: Color.fromRGBO(73, 229, 234, 1.0),
-                  fontSize: 16,
-                ),
-              ),
-            ),
-          ),
+          SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+          const MyWidget(),
         ],
       ),
       body: Padding(
@@ -75,9 +142,10 @@ class _QuizPageState extends State<QuizPage> {
                 height: MediaQuery.of(context).size.height * 0.1,
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
-                  itemCount: 10,
+                  itemCount: questions.length,
                   itemBuilder: (context, index) {
-                    final number = index + 1;
+                    final question = questions[index];
+                    final number = question.id;
                     bool isSelected = false;
                     bool isPreviousSelected = false;
                     if (selectedNumber == number) {
@@ -107,7 +175,7 @@ class _QuizPageState extends State<QuizPage> {
                         '$number',
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       );
@@ -120,7 +188,7 @@ class _QuizPageState extends State<QuizPage> {
                         '$number',
                         style: const TextStyle(
                           color: Color.fromRGBO(73, 229, 234, 1.0),
-                          fontSize: 16,
+                          fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
                       );
@@ -139,27 +207,36 @@ class _QuizPageState extends State<QuizPage> {
               ),
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
-                child: const Row(
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '2.',
-                      style: TextStyle(
+                      '${questions[selectedNumber - 1].id}.',
+                      style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
-                    Icon(
-                      Icons.bookmark_border_outlined,
-                      color: Color.fromRGBO(73, 229, 234, 1.0),
-                      size: 24,
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isBookmarked = !_isBookmarked;
+                        });
+                      },
+                      child: Icon(
+                        _isBookmarked
+                            ? Icons.bookmark
+                            : Icons.bookmark_border_outlined,
+                        color: const Color.fromRGBO(73, 229, 234, 1.0),
+                        size: 24,
+                      ),
                     ),
                   ],
                 ),
               ),
-              const Text(
-                'Which of following is the fastest means of transportation?',
-                style: TextStyle(
+              Text(
+                questions[selectedNumber - 1].question,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -168,80 +245,68 @@ class _QuizPageState extends State<QuizPage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      child: const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'A. Roadways',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
+                  CustomOutlinedButton(
+                    text: 'A. ${questions[selectedNumber - 1].options[0]}',
+                    onPressed: () {
+                      setState(() {
+                        // Check if the selected answer is correct
+                        bool isCorrect =
+                            questions[selectedNumber - 1].options[0] ==
+                                questions[selectedNumber - 1].correctAnswer;
+
+                        // Handle button press here
+                      });
+                    },
+                    isCorrect: questions[selectedNumber - 1].options[0] ==
+                        questions[selectedNumber - 1].correctAnswer,
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      child: const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'B. Airways',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
+                  CustomOutlinedButton(
+                    text: 'B. ${questions[selectedNumber - 1].options[1]}',
+                    onPressed: () {
+                      setState(() {
+                        // Check if the selected answer is correct
+                        bool isCorrect =
+                            questions[selectedNumber - 1].options[1] ==
+                                questions[selectedNumber - 1].correctAnswer;
+
+                        // Handle button press here
+                      });
+                    },
+                    isCorrect: questions[selectedNumber - 1].options[1] ==
+                        questions[selectedNumber - 1].correctAnswer,
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      child: const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'C. Waterways',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
+                  CustomOutlinedButton(
+                    text: 'C. ${questions[selectedNumber - 1].options[2]}',
+                    onPressed: () {
+                      setState(() {
+                        // Check if the selected answer is correct
+                        bool isCorrect =
+                            questions[selectedNumber - 1].options[2] ==
+                                questions[selectedNumber - 1].correctAnswer;
+
+                        // Handle button press here
+                      });
+                    },
+                    isCorrect: questions[selectedNumber - 1].options[2] ==
+                        questions[selectedNumber - 1].correctAnswer,
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    child: OutlinedButton(
-                      onPressed: () {},
-                      child: const Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          'D. Railways',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ),
-                    ),
+                  CustomOutlinedButton(
+                    text: 'D. ${questions[selectedNumber - 1].options[3]}',
+                    onPressed: () {
+                      setState(() {
+                        // Check if the selected answer is correct
+                        bool isCorrect =
+                            questions[selectedNumber - 1].options[3] ==
+                                questions[selectedNumber - 1].correctAnswer;
+
+                        // Handle button press here
+                      });
+                    },
+                    isCorrect: questions[selectedNumber - 1].options[3] ==
+                        questions[selectedNumber - 1].correctAnswer,
                   ),
                 ],
               ),
@@ -249,37 +314,55 @@ class _QuizPageState extends State<QuizPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    width: MediaQuery.of(context).size.height * 0.07,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color.fromRGBO(196, 196, 196, 1),
-                        width: 1.0,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (selectedNumber > 1) {
+                          selectedNumber--;
+                        }
+                      });
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.height * 0.07,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color.fromRGBO(196, 196, 196, 1),
+                          width: 1.0,
+                        ),
                       ),
-                    ),
-                    child: const Icon(
-                      Icons.keyboard_backspace,
-                      color: Color.fromRGBO(196, 196, 196, 1),
+                      child: const Icon(
+                        Icons.keyboard_backspace,
+                        color: Color.fromRGBO(196, 196, 196, 1),
+                      ),
                     ),
                   ),
                   SizedBox(width: MediaQuery.of(context).size.width * 0.07),
-                  Container(
-                    width: MediaQuery.of(context).size.height * 0.07,
-                    height: MediaQuery.of(context).size.height * 0.07,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: const Color.fromRGBO(73, 229, 234, 1.0),
-                        width: 1.0,
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        if (selectedNumber < questions.length) {
+                          selectedNumber++;
+                        }
+                      });
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.height * 0.07,
+                      height: MediaQuery.of(context).size.height * 0.07,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color.fromRGBO(73, 229, 234, 1.0),
+                          width: 1.0,
+                        ),
                       ),
-                    ),
-                    child: Transform.rotate(
-                      angle: 3.14,
-                      child: const Icon(
-                        Icons.keyboard_backspace,
-                        color: Color.fromRGBO(73, 229, 234, 1.0),
+                      child: Transform.rotate(
+                        angle: 3.14,
+                        child: const Icon(
+                          Icons.keyboard_backspace,
+                          color: Color.fromRGBO(73, 229, 234, 1.0),
+                        ),
                       ),
                     ),
                   ),
