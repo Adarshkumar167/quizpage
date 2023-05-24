@@ -15,18 +15,21 @@ class Question {
   final String question;
   final List<String> options;
   final String correctAnswer;
+  bool isBookmarked;
+  String selectedAnswer;
 
   Question({
     required this.id,
     required this.question,
     required this.options,
     required this.correctAnswer,
+    this.isBookmarked = false,
+    this.selectedAnswer = '',
   });
 }
 
 class _QuizPageState extends State<QuizPage> {
   var selectedNumber = 1;
-  bool _isBookmarked = false;
 
   final List<Question> questions = [
     Question(
@@ -137,6 +140,7 @@ class _QuizPageState extends State<QuizPage> {
             horizontal: MediaQuery.of(context).size.width * 0.05),
         child: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
@@ -220,11 +224,12 @@ class _QuizPageState extends State<QuizPage> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          _isBookmarked = !_isBookmarked;
+                          questions[selectedNumber - 1].isBookmarked =
+                              !questions[selectedNumber - 1].isBookmarked;
                         });
                       },
                       child: Icon(
-                        _isBookmarked
+                        questions[selectedNumber - 1].isBookmarked
                             ? Icons.bookmark
                             : Icons.bookmark_border_outlined,
                         color: const Color.fromRGBO(73, 229, 234, 1.0),
@@ -248,14 +253,7 @@ class _QuizPageState extends State<QuizPage> {
                   CustomOutlinedButton(
                     text: 'A. ${questions[selectedNumber - 1].options[0]}',
                     onPressed: () {
-                      setState(() {
-                        // Check if the selected answer is correct
-                        bool isCorrect =
-                            questions[selectedNumber - 1].options[0] ==
-                                questions[selectedNumber - 1].correctAnswer;
-
-                        // Handle button press here
-                      });
+                      setState(() {});
                     },
                     isCorrect: questions[selectedNumber - 1].options[0] ==
                         questions[selectedNumber - 1].correctAnswer,
@@ -264,14 +262,7 @@ class _QuizPageState extends State<QuizPage> {
                   CustomOutlinedButton(
                     text: 'B. ${questions[selectedNumber - 1].options[1]}',
                     onPressed: () {
-                      setState(() {
-                        // Check if the selected answer is correct
-                        bool isCorrect =
-                            questions[selectedNumber - 1].options[1] ==
-                                questions[selectedNumber - 1].correctAnswer;
-
-                        // Handle button press here
-                      });
+                      setState(() {});
                     },
                     isCorrect: questions[selectedNumber - 1].options[1] ==
                         questions[selectedNumber - 1].correctAnswer,
@@ -280,14 +271,7 @@ class _QuizPageState extends State<QuizPage> {
                   CustomOutlinedButton(
                     text: 'C. ${questions[selectedNumber - 1].options[2]}',
                     onPressed: () {
-                      setState(() {
-                        // Check if the selected answer is correct
-                        bool isCorrect =
-                            questions[selectedNumber - 1].options[2] ==
-                                questions[selectedNumber - 1].correctAnswer;
-
-                        // Handle button press here
-                      });
+                      setState(() {});
                     },
                     isCorrect: questions[selectedNumber - 1].options[2] ==
                         questions[selectedNumber - 1].correctAnswer,
@@ -296,14 +280,7 @@ class _QuizPageState extends State<QuizPage> {
                   CustomOutlinedButton(
                     text: 'D. ${questions[selectedNumber - 1].options[3]}',
                     onPressed: () {
-                      setState(() {
-                        // Check if the selected answer is correct
-                        bool isCorrect =
-                            questions[selectedNumber - 1].options[3] ==
-                                questions[selectedNumber - 1].correctAnswer;
-
-                        // Handle button press here
-                      });
+                      setState(() {});
                     },
                     isCorrect: questions[selectedNumber - 1].options[3] ==
                         questions[selectedNumber - 1].correctAnswer,
@@ -368,7 +345,7 @@ class _QuizPageState extends State<QuizPage> {
                   ),
                 ],
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.03),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.07),
             ],
           ),
         ),

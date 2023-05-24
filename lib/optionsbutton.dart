@@ -19,6 +19,18 @@ class CustomOutlinedButton extends StatefulWidget {
 class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
   bool _isSelected = false;
 
+  String get iconPath {
+    if (_isSelected) {
+      if (widget.isCorrect) {
+        return 'assets/image/correctans.png';
+      } else {
+        return 'assets/image/wrongans.png';
+      }
+    } else {
+      return 'assets/image/startans.png';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Color borderColor = Colors.black;
@@ -50,7 +62,7 @@ class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
                 right: MediaQuery.of(context).size.width * 0.05,
               ),
               child: SizedBox(
-                child: Image.asset('assets/image/startans.png'),
+                child: Image.asset(iconPath), // Use the computed iconPath here
               ),
             ),
           ),
