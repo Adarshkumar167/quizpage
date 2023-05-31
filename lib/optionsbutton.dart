@@ -2,25 +2,25 @@ import 'package:flutter/material.dart';
 
 class CustomOutlinedButton extends StatefulWidget {
   final String text;
-  final Function onPressed;
+  final Function(String) onPressed;
   final bool isCorrect;
+  final bool isSelected;
 
   const CustomOutlinedButton({
-    super.key,
+    Key? key,
     required this.text,
     required this.onPressed,
     this.isCorrect = false,
-  });
+    this.isSelected = false,
+  }) : super(key: key);
 
   @override
   State<CustomOutlinedButton> createState() => _CustomOutlinedButtonState();
 }
 
 class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
-  bool _isSelected = false;
-
   String get iconPath {
-    if (_isSelected) {
+    if (widget.isSelected) {
       if (widget.isCorrect) {
         return 'assets/image/correctans.png';
       } else {
@@ -37,7 +37,7 @@ class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
     Color backgroundColor = Colors.white;
     Color textColor = Colors.black;
 
-    if (_isSelected) {
+    if (widget.isSelected) {
       if (widget.isCorrect) {
         borderColor = const Color.fromRGBO(73, 234, 118, 1.0);
         backgroundColor = const Color.fromRGBO(73, 234, 118, 1.0);
@@ -62,7 +62,9 @@ class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
                 right: MediaQuery.of(context).size.width * 0.05,
               ),
               child: SizedBox(
-                child: Image.asset(iconPath), // Use the computed iconPath here
+                child: Image.asset(
+                  iconPath,
+                ),
               ),
             ),
           ),
@@ -71,10 +73,9 @@ class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
             width: MediaQuery.of(context).size.width * 0.7,
             child: OutlinedButton(
               onPressed: () {
-                setState(() {
-                  _isSelected = !_isSelected;
-                });
-                widget.onPressed();
+                if (!widget.isSelected) {
+                  widget.onPressed(widget.text.substring(3));
+                }
               },
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(

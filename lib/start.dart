@@ -13,14 +13,16 @@ class _StartPageState extends State<StartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: OutlinedButton(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const QuizPage()),
-            );
-          },
-          child: const Text('Start Quiz')),
+      body: Center(
+        child: OutlinedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const QuizPage()),
+              );
+            },
+            child: const Text('Start Quiz')),
+      ),
     );
   }
 }
