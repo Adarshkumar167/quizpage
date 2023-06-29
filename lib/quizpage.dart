@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizpage/optionsbutton.dart';
+import 'package:quizpage/other/submit_page.dart';
 import 'package:quizpage/submit.dart';
 import 'package:quizpage/timer.dart';
 import 'package:quizpage/questions.dart';
@@ -13,39 +14,82 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   var selectedNumber = 1;
-
   List<int> selectedOptionIndexes = List<int>.filled(questions.length, -1);
+  int score = 0;
+
+  void calculateScore() {
+    score = 0;
+    for (int i = 0; i < selectedOptionIndexes.length; i++) {
+      if (selectedOptionIndexes[i] != -1 &&
+          questions[i].options[selectedOptionIndexes[i]] ==
+              questions[i].correctAnswer) {
+        score++;
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding:
-              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
-          child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context);
-            },
-            child: const Icon(Icons.keyboard_backspace_rounded),
-          ),
-        ),
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            const Icon(
-              Icons.pause_circle_filled_rounded,
-              color: Color.fromRGBO(196, 196, 196, 1),
+          leading: Padding(
+            padding:
+                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: const Icon(Icons.keyboard_backspace_rounded),
             ),
-            SizedBox(width: MediaQuery.of(context).size.width * 0.01),
-            const Time(),
-          ],
-        ),
-        actions: [
-          SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-          const MyWidget(),
-        ],
-      ),
+          ),
+          title: const Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Icon(
+                Icons.pause_circle_filled_rounded,
+                color: Color.fromRGBO(196, 196, 196, 1),
+              ),
+              SizedBox(width: 8),
+              Time(),
+            ],
+          ),
+          actions: [
+            SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+            MyWidget(onTap: () {
+              calculateScore();
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: const Text(
+                      'Are you sure you want to submit?',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SummaryPage(marks: score),
+                            ),
+                          );
+                        },
+                        child: const Text('Yes'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context); // Close the dialog
+                        },
+                        child: const Text('No'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            })
+          ]),
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.05),

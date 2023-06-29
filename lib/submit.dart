@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class MyWidget extends StatefulWidget {
-  const MyWidget({super.key});
+  final VoidCallback onTap;
+
+  const MyWidget({Key? key, required this.onTap}) : super(key: key);
 
   @override
   State<MyWidget> createState() => _MyWidgetState();
@@ -14,6 +16,7 @@ class _MyWidgetState extends State<MyWidget> {
     setState(() {
       isTapped = !isTapped;
     });
+    widget.onTap(); // Trigger the onTap callback
   }
 
   @override

@@ -22,12 +22,12 @@ class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
   String get iconPath {
     if (widget.isSelected) {
       if (widget.isCorrect) {
-        return 'assets/image/correctans.png';
+        return 'assets/image/options/correctans.png';
       } else {
-        return 'assets/image/wrongans.png';
+        return 'assets/image/options/wrongans.png';
       }
     } else {
-      return 'assets/image/startans.png';
+      return 'assets/image/options/startans.png';
     }
   }
 
