@@ -47,12 +47,10 @@ class _StartPageState extends State<StartPage> {
                           ),
                         ),
                         Transform.translate(
-                          offset: const Offset(-50,
-                              -25), // Adjust the positioning based on your image size and desired effect
+                          offset: const Offset(-50, -25),
                           child: Image.asset(
                             'assets/image/starting_page/crown.png',
-                            width:
-                                30, // Adjust the width of the image as needed
+                            width: 30,
                           ),
                         ),
                       ],

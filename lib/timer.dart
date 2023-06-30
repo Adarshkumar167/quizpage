@@ -29,7 +29,6 @@ class _TimeState extends State<Time> {
     _timer = Timer.periodic(oneSec, (Timer timer) {
       if (_remainingSeconds == 0) {
         timer.cancel();
-        // Timer has ended, handle your logic here
       } else {
         setState(() {
           _remainingSeconds--;

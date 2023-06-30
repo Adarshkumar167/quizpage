@@ -13,17 +13,27 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  var selectedNumber = 1;
+  int selectedNumber = 1;
   List<int> selectedOptionIndexes = List<int>.filled(questions.length, -1);
   int score = 0;
+  int left = 0;
+  int wrong = 0;
 
   void calculateScore() {
     score = 0;
+    left = 0;
+    wrong = 0;
     for (int i = 0; i < selectedOptionIndexes.length; i++) {
       if (selectedOptionIndexes[i] != -1 &&
           questions[i].options[selectedOptionIndexes[i]] ==
               questions[i].correctAnswer) {
         score++;
+      }
+      if (selectedOptionIndexes[i] == -1) left++;
+      if (selectedOptionIndexes[i] != -1 &&
+          questions[i].options[selectedOptionIndexes[i]] !=
+              questions[i].correctAnswer) {
+        wrong++;
       }
     }
   }
@@ -68,11 +78,17 @@ class _QuizPageState extends State<QuizPage> {
                     actions: [
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context); // Close the dialog
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SummaryPage(marks: score),
+                              builder: (context) => SummaryPage(
+                                marks: score,
+                                skipped: left,
+                                incorrect: wrong,
+                                questions: questions.length,
+                              ),
                             ),
                           );
                         },
@@ -80,7 +96,7 @@ class _QuizPageState extends State<QuizPage> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pop(context); // Close the dialog
+                          Navigator.pop(context);
                         },
                         child: const Text('No'),
                       ),
@@ -285,16 +301,16 @@ class _QuizPageState extends State<QuizPage> {
                   SizedBox(width: MediaQuery.of(context).size.width * 0.07),
                   GestureDetector(
                     onTap: () {
-                      if (selectedOptionIndexes[selectedNumber - 1] != -1) {
-                        setState(() {
-                          if (selectedNumber < questions.length) {
-                            selectedOptionIndexes[selectedNumber] =
-                                selectedOptionIndexes[selectedNumber - 1];
+                      setState(() {
+                        if (selectedNumber < questions.length) {
+                          if (selectedOptionIndexes[selectedNumber] != -1) {
+                            selectedNumber++;
+                          } else {
                             selectedNumber++;
                             selectedOptionIndexes[selectedNumber - 1] = -1;
                           }
-                        });
-                      }
+                        }
+                      });
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.height * 0.07,

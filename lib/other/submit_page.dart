@@ -2,11 +2,61 @@ import 'package:flutter/material.dart';
 
 class SummaryPage extends StatelessWidget {
   final int marks;
+  final int skipped;
+  final int incorrect;
+  final int questions;
 
-  const SummaryPage({Key? key, required this.marks}) : super(key: key);
+  const SummaryPage(
+      {Key? key,
+      required this.marks,
+      required this.skipped,
+      required this.incorrect,
+      required this.questions})
+      : super(key: key);
+
+  int storeValue(int marks) {
+    double percentage = (((marks + incorrect) / questions) * 100);
+
+    if (percentage >= 90 && percentage <= 100) {
+      return 1;
+    } else if (percentage >= 60 && percentage <= 89.999999) {
+      return 2;
+    } else if (percentage >= 0 && percentage <= 59.999999) {
+      return 3;
+    } else {
+      return 0;
+    }
+  }
+
+  String getMedalName(int storedValue) {
+    switch (storedValue) {
+      case 1:
+        return 'Gold Medal';
+      case 2:
+        return 'Silver Medal';
+      case 3:
+        return 'Bronze Medal';
+      default:
+        return '';
+    }
+  }
+
+  Color getContainerColor(int storedValue) {
+    switch (storedValue) {
+      case 1:
+        return const Color.fromRGBO(255, 203, 32, 1);
+      case 2:
+        return const Color.fromRGBO(140, 149, 164, 1);
+      case 3:
+        return const Color.fromRGBO(187, 134, 71, 1);
+      default:
+        return Colors.transparent;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    int storedValue = storeValue(marks);
     return Scaffold(
       backgroundColor: const Color.fromRGBO(250, 250, 250, 1),
       appBar: AppBar(
@@ -52,64 +102,58 @@ class SummaryPage extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                            horizontal:
-                                MediaQuery.of(context).size.width * 0.1),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(
-                                  'assets/image/summary_page/medal_2.png',
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.3,
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/image/summary_page/medal_$storedValue.png',
+                                width: MediaQuery.of(context).size.width * 0.3,
+                              ),
+                              Transform.translate(
+                                offset: const Offset(-90, -65),
+                                child: Image.asset(
+                                  'assets/image/summary_page/star1.png',
+                                  width: 70,
                                 ),
-                                Transform.translate(
-                                  offset: const Offset(-90, -65),
-                                  child: Image.asset(
-                                    'assets/image/summary_page/star1.png',
-                                    width: 70,
-                                  ),
+                              ),
+                              Transform.translate(
+                                offset: const Offset(100, 35),
+                                child: Image.asset(
+                                  'assets/image/summary_page/star2.png',
+                                  width: 90,
                                 ),
-                                Transform.translate(
-                                  offset: const Offset(100, 35),
-                                  child: Image.asset(
-                                    'assets/image/summary_page/star2.png',
-                                    width: 90,
-                                  ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            getMedalName(storedValue),
+                            style: const TextStyle(
+                              fontSize: 30,
+                              color: Color.fromRGBO(62, 73, 79, 1),
+                              fontWeight: FontWeight.bold,
+                              shadows: [
+                                Shadow(
+                                  color: Color.fromRGBO(0, 0, 0, 0.25),
+                                  offset: Offset(2, 2),
+                                  blurRadius: 3,
                                 ),
                               ],
                             ),
-                            const Text(
-                              'Silver Medal',
-                              style: TextStyle(
-                                fontSize: 30,
-                                color: Color.fromRGBO(62, 73, 79, 1),
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                    color: Color.fromRGBO(0, 0, 0, 0.25),
-                                    offset: Offset(2, 2),
-                                    blurRadius: 3,
-                                  ),
-                                ],
-                              ),
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            height: 5,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: getContainerColor(storedValue),
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                            const SizedBox(height: 10),
-                            Container(
-                              height: 5,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                color: const Color.fromRGBO(62, 73, 79, 0.5),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                            const SizedBox(height: 30),
-                          ],
-                        ),
+                          ),
+                          const SizedBox(height: 30),
+                        ],
                       ),
                       const Text(
                         'We have completed Quiz successfully',
@@ -133,7 +177,7 @@ class SummaryPage extends StatelessWidget {
                                 ),
                               ),
                               TextSpan(
-                                text: '$marks questions',
+                                text: '${marks + incorrect} questions',
                                 style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
@@ -217,11 +261,13 @@ class SummaryPage extends StatelessWidget {
                           const Text(
                             'Completion',
                             style: TextStyle(
-                                fontSize: 12,
-                                color: Color.fromRGBO(151, 152, 159, 1)),
+                              fontSize: 12,
+                              color: Color.fromRGBO(151, 152, 159, 1),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           Text(
-                            '$marks%',
+                            '${(((marks + incorrect) / questions) * 100).toStringAsFixed(0)}%',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -246,8 +292,10 @@ class SummaryPage extends StatelessWidget {
                           const Text(
                             'Correct Answer',
                             style: TextStyle(
-                                fontSize: 12,
-                                color: Color.fromRGBO(151, 152, 159, 1)),
+                              fontSize: 12,
+                              color: Color.fromRGBO(151, 152, 159, 1),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           Text(
                             '$marks questions',
@@ -280,11 +328,13 @@ class SummaryPage extends StatelessWidget {
                           const Text(
                             'Skipped',
                             style: TextStyle(
-                                fontSize: 12,
-                                color: Color.fromRGBO(151, 152, 159, 1)),
+                              fontSize: 12,
+                              color: Color.fromRGBO(151, 152, 159, 1),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           Text(
-                            '10-$marks',
+                            '$skipped',
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -309,13 +359,15 @@ class SummaryPage extends StatelessWidget {
                           const Text(
                             'Incorrect Answer',
                             style: TextStyle(
-                                fontSize: 12,
-                                color: Color.fromRGBO(151, 152, 159, 1)),
+                              fontSize: 12,
+                              color: Color.fromRGBO(151, 152, 159, 1),
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                           Text(
-                            '$marks%',
+                            '$incorrect',
                             style: const TextStyle(
-                                fontSize: 20, color: Colors.black),
+                                fontSize: 16, color: Colors.black),
                           ),
                         ],
                       ),

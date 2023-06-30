@@ -16,7 +16,7 @@ class _MyWidgetState extends State<MyWidget> {
     setState(() {
       isTapped = !isTapped;
     });
-    widget.onTap(); // Trigger the onTap callback
+    widget.onTap();
   }
 
   @override
