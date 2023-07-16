@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 
 class MyWidget extends StatefulWidget {
@@ -14,9 +15,14 @@ class _MyWidgetState extends State<MyWidget> {
 
   void handleTap() {
     setState(() {
-      isTapped = !isTapped;
+      isTapped = true;
     });
     widget.onTap();
+    Timer(const Duration(seconds: 1), () {
+      setState(() {
+        isTapped = false;
+      });
+    });
   }
 
   @override
