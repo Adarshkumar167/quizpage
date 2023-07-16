@@ -9,7 +9,7 @@ class Time extends StatefulWidget {
 }
 
 class _TimeState extends State<Time> {
-  int _remainingSeconds = 600;
+  int _remainingSeconds = 10;
   late Timer _timer;
 
   @override

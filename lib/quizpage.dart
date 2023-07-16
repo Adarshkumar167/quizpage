@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:quizpage/optionsbutton.dart';
 import 'package:quizpage/other/submit_page.dart';
+import 'package:quizpage/other/submit_page2.dart';
 import 'package:quizpage/submit.dart';
 import 'package:quizpage/timer.dart';
-import 'package:quizpage/questions.dart';
+import 'package:quizpage/data/questions.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({Key? key}) : super(key: key);
@@ -67,6 +68,7 @@ class _QuizPageState extends State<QuizPage> {
             SizedBox(width: MediaQuery.of(context).size.width * 0.1),
             MyWidget(onTap: () {
               calculateScore();
+              double correctness = (score / questions.length) * 100;
               showDialog(
                 context: context,
                 builder: (context) {
@@ -79,18 +81,33 @@ class _QuizPageState extends State<QuizPage> {
                       TextButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          Navigator.pop(context);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SummaryPage(
-                                marks: score,
-                                skipped: left,
-                                incorrect: wrong,
-                                questions: questions.length,
+                          if (correctness < 40) {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SummaryPage2(
+                                  marks: score,
+                                  skipped: left,
+                                  incorrect: wrong,
+                                  questions: questions.length,
+                                ),
                               ),
-                            ),
-                          );
+                            );
+                          } else {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SummaryPage(
+                                  marks: score,
+                                  skipped: left,
+                                  incorrect: wrong,
+                                  questions: questions.length,
+                                ),
+                              ),
+                            );
+                          }
                         },
                         child: const Text('Yes'),
                       ),
@@ -130,7 +147,8 @@ class _QuizPageState extends State<QuizPage> {
                     }
                     BoxDecoration decoration;
                     Widget child;
-                    if (isPreviousSelected) {
+                    if (isPreviousSelected &&
+                        selectedOptionIndexes[number - 1] != -1) {
                       decoration = BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
@@ -183,28 +201,12 @@ class _QuizPageState extends State<QuizPage> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       '${questions[selectedNumber - 1].id}.',
                       style: const TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          questions[selectedNumber - 1].isBookmarked =
-                              !questions[selectedNumber - 1].isBookmarked;
-                        });
-                      },
-                      child: Icon(
-                        questions[selectedNumber - 1].isBookmarked
-                            ? Icons.bookmark
-                            : Icons.bookmark_border_outlined,
-                        color: const Color.fromRGBO(73, 229, 234, 1.0),
-                        size: 24,
                       ),
                     ),
                   ],
@@ -272,65 +274,75 @@ class _QuizPageState extends State<QuizPage> {
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: (selectedNumber == 1)
+                    ? MainAxisAlignment.end // Align to the right
+                    : MainAxisAlignment.start,
                 children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (selectedNumber > 1) {
-                        setState(() {
-                          selectedNumber--;
-                        });
-                      }
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.height * 0.07,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color.fromRGBO(196, 196, 196, 1),
-                          width: 1.0,
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.keyboard_backspace,
-                        color: Color.fromRGBO(196, 196, 196, 1),
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: MediaQuery.of(context).size.width * 0.07),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        if (selectedNumber < questions.length) {
-                          if (selectedOptionIndexes[selectedNumber] != -1) {
-                            selectedNumber++;
-                          } else {
-                            selectedNumber++;
-                            selectedOptionIndexes[selectedNumber - 1] = -1;
-                          }
-                        }
-                      });
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.height * 0.07,
-                      height: MediaQuery.of(context).size.height * 0.07,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color.fromRGBO(73, 229, 234, 1.0),
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Transform.rotate(
-                        angle: 3.14,
-                        child: const Icon(
-                          Icons.keyboard_backspace,
-                          color: Color.fromRGBO(73, 229, 234, 1.0),
+                  if (selectedNumber >
+                      1) // Show the first GestureDetector only if selectedNumber > 1
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: MediaQuery.of(context).size.width * 0.26),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            selectedNumber--;
+                          });
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          height: MediaQuery.of(context).size.width * 0.15,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color.fromRGBO(196, 196, 196, 1),
+                              width: 1.0,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.keyboard_backspace,
+                            color: Color.fromRGBO(196, 196, 196, 1),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                  SizedBox(width: MediaQuery.of(context).size.width * 0.08),
+                  if (selectedNumber < questions.length)
+                    // Show the second GestureDetector only if selectedNumber < questions.length
+                    Padding(
+                      padding: EdgeInsets.only(
+                          right: MediaQuery.of(context).size.width * 0.26),
+                      child: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            if (selectedOptionIndexes[selectedNumber] != -1) {
+                              selectedNumber++;
+                            } else {
+                              selectedNumber++;
+                              selectedOptionIndexes[selectedNumber - 1] = -1;
+                            }
+                          });
+                        },
+                        child: Container(
+                          width: MediaQuery.of(context).size.width * 0.15,
+                          height: MediaQuery.of(context).size.width * 0.15,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: const Color.fromRGBO(73, 229, 234, 1.0),
+                              width: 1.0,
+                            ),
+                          ),
+                          child: Transform.rotate(
+                            angle: 3.14,
+                            child: const Icon(
+                              Icons.keyboard_backspace,
+                              color: Color.fromRGBO(73, 229, 234, 1.0),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.07),
