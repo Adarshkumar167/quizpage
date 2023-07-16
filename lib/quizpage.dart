@@ -43,86 +43,87 @@ class _QuizPageState extends State<QuizPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: Padding(
-            padding:
-                EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
-            child: GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: const Icon(Icons.keyboard_backspace_rounded),
+        leading: Padding(
+          padding:
+              EdgeInsets.only(left: MediaQuery.of(context).size.width * 0.05),
+          child: GestureDetector(
+            onTap: () {
+              Navigator.pop(context);
+            },
+            child: const Icon(Icons.keyboard_backspace_rounded),
+          ),
+        ),
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(
+              Icons.pause_circle_filled_rounded,
+              color: Color.fromRGBO(196, 196, 196, 1),
             ),
-          ),
-          title: const Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Icon(
-                Icons.pause_circle_filled_rounded,
-                color: Color.fromRGBO(196, 196, 196, 1),
-              ),
-              SizedBox(width: 8),
-              Time(),
-            ],
-          ),
-          actions: [
-            SizedBox(width: MediaQuery.of(context).size.width * 0.1),
-            MyWidget(onTap: () {
-              calculateScore();
-              double correctness = (score / questions.length) * 100;
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return AlertDialog(
-                    title: const Text(
-                      'Are you sure you want to submit?',
-                      style: TextStyle(fontSize: 16),
+            SizedBox(width: 8),
+            Time(),
+          ],
+        ),
+        actions: [
+          SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+          MyWidget(onTap: () {
+            calculateScore();
+            double correctness = (score / questions.length) * 100;
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text(
+                    'Are you sure you want to submit?',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if (correctness < 40) {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SummaryPage2(
+                                marks: score,
+                                skipped: left,
+                                incorrect: wrong,
+                                questions: questions.length,
+                              ),
+                            ),
+                          );
+                        } else {
+                          Navigator.pop(context);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SummaryPage(
+                                marks: score,
+                                skipped: left,
+                                incorrect: wrong,
+                                questions: questions.length,
+                              ),
+                            ),
+                          );
+                        }
+                      },
+                      child: const Text('Yes'),
                     ),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                          if (correctness < 40) {
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SummaryPage2(
-                                  marks: score,
-                                  skipped: left,
-                                  incorrect: wrong,
-                                  questions: questions.length,
-                                ),
-                              ),
-                            );
-                          } else {
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SummaryPage(
-                                  marks: score,
-                                  skipped: left,
-                                  incorrect: wrong,
-                                  questions: questions.length,
-                                ),
-                              ),
-                            );
-                          }
-                        },
-                        child: const Text('Yes'),
-                      ),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('No'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            })
-          ]),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('No'),
+                    ),
+                  ],
+                );
+              },
+            );
+          })
+        ],
+      ),
       body: Padding(
         padding: EdgeInsets.symmetric(
             horizontal: MediaQuery.of(context).size.width * 0.05),
@@ -139,20 +140,20 @@ class _QuizPageState extends State<QuizPage> {
                     final question = questions[index];
                     final number = question.id;
                     bool isSelected = false;
-                    bool isPreviousSelected = false;
                     if (selectedNumber == number) {
                       isSelected = true;
-                    } else if (selectedNumber > number) {
-                      isPreviousSelected = true;
                     }
                     BoxDecoration decoration;
                     Widget child;
-                    if (isPreviousSelected &&
-                        selectedOptionIndexes[number - 1] != -1) {
+
+                    bool isMarked =
+                        isSelected && selectedOptionIndexes[number - 1] != -1;
+                    if (isMarked) {
                       decoration = BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                            color: const Color.fromRGBO(73, 229, 234, 1.0)),
+                          color: const Color.fromRGBO(73, 229, 234, 1.0),
+                        ),
                       );
                       child = const Icon(
                         Icons.check,
@@ -171,6 +172,18 @@ class _QuizPageState extends State<QuizPage> {
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
+                      );
+                    } else if (selectedOptionIndexes[number - 1] != -1) {
+                      decoration = BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: const Color.fromRGBO(73, 229, 234, 1.0),
+                        ),
+                      );
+                      child = const Icon(
+                        Icons.check,
+                        color: Color.fromRGBO(73, 229, 234, 1.0),
+                        size: 16,
                       );
                     } else {
                       decoration = const BoxDecoration(
