@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizpage/quizpage.dart';
+import 'package:quizpage/pages/select_class.dart';
 
 class StartPage extends StatefulWidget {
   const StartPage({super.key});
@@ -78,7 +78,7 @@ class _StartPageState extends State<StartPage> {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const QuizPage()),
+                      MaterialPageRoute(builder: (context) => const SelectClassPage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

@@ -1,13 +1,18 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:quizpage/data/questions.dart';
 import 'package:quizpage/optionsbutton.dart';
 import 'package:quizpage/other/submit_page.dart';
 import 'package:quizpage/other/submit_page2.dart';
 import 'package:quizpage/submit.dart';
 import 'package:quizpage/timer.dart';
-import 'package:quizpage/data/questions.dart';
 
 class QuizPage extends StatefulWidget {
-  const QuizPage({Key? key}) : super(key: key);
+  final List chapters;
+  const QuizPage({
+    Key? key,
+    required this.chapters,
+  }) : super(key: key);
 
   @override
   State<QuizPage> createState() => _QuizPageState();
@@ -15,10 +20,37 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   int selectedNumber = 1;
-  List<int> selectedOptionIndexes = List<int>.filled(questions.length, -1);
+  List questions = [];
   int score = 0;
   int left = 0;
   int wrong = 0;
+  late List<int> selectedOptionIndexes;
+
+  @override
+  void initState() {
+    addDataToQuestions();
+    super.initState();
+  }
+
+  void addDataToQuestions() {
+    int id = 1;
+    for (var element in widget.chapters) {
+      questions.add(Question(
+          id: id,
+          question: element['Question'],
+          options: [
+            element['Option 1'].toString(),
+            element['Option 2'].toString(),
+            element['Option 3'].toString(),
+            element['Option 4'].toString()
+          ],
+          correctAnswer: element['Answer'].toString()));
+      id++;
+
+    }
+    selectedOptionIndexes = List<int>.filled(questions.length, -1);
+
+  }
 
   void calculateScore() {
     score = 0;
@@ -87,6 +119,7 @@ class _QuizPageState extends State<QuizPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => SummaryPage2(
+                                chapters: widget.chapters,
                                 marks: score,
                                 skipped: left,
                                 incorrect: wrong,
