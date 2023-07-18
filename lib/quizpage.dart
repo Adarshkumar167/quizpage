@@ -46,10 +46,8 @@ class _QuizPageState extends State<QuizPage> {
           ],
           correctAnswer: element['Answer'].toString()));
       id++;
-
     }
     selectedOptionIndexes = List<int>.filled(questions.length, -1);
-
   }
 
   void calculateScore() {
@@ -71,6 +69,40 @@ class _QuizPageState extends State<QuizPage> {
     }
   }
 
+  void handleTimerExpired() {
+    calculateScore();
+    double correctness = (score / questions.length) * 100;
+
+    if (correctness < 40) {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SummaryPage2(
+            chapters: widget.chapters,
+            marks: score,
+            skipped: left,
+            incorrect: wrong,
+            questions: questions.length,
+          ),
+        ),
+      );
+    } else {
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => SummaryPage(
+            marks: score,
+            skipped: left,
+            incorrect: wrong,
+            questions: questions.length,
+          ),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,15 +117,15 @@ class _QuizPageState extends State<QuizPage> {
             child: const Icon(Icons.keyboard_backspace_rounded),
           ),
         ),
-        title: const Row(
+        title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Icon(
+            const Icon(
               Icons.pause_circle_filled_rounded,
               color: Color.fromRGBO(196, 196, 196, 1),
             ),
-            SizedBox(width: 8),
-            Time(),
+            const SizedBox(width: 8),
+            Time(onTimerExpired: handleTimerExpired),
           ],
         ),
         actions: [

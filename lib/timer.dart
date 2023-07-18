@@ -1,15 +1,16 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class Time extends StatefulWidget {
-  const Time({Key? key}) : super(key: key);
+  final VoidCallback onTimerExpired;
+  const Time({Key? key, required this.onTimerExpired}) : super(key: key);
 
   @override
   State<Time> createState() => _TimeState();
 }
 
 class _TimeState extends State<Time> {
-  int _remainingSeconds = 10;
+  int _remainingSeconds = 300;
   late Timer _timer;
 
   @override
@@ -29,6 +30,7 @@ class _TimeState extends State<Time> {
     _timer = Timer.periodic(oneSec, (Timer timer) {
       if (_remainingSeconds == 0) {
         timer.cancel();
+        widget.onTimerExpired(); // Call the callback function
       } else {
         setState(() {
           _remainingSeconds--;
