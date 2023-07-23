@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:confetti/confetti.dart';
+import 'package:quizpage/pages/review.dart';
 
-import 'package:quizpage/start.dart';
+import 'package:quizpage/pages/start.dart';
 
 class SummaryPage extends StatefulWidget {
   final int marks;
   final int skipped;
   final int incorrect;
   final int questions;
+  final List chapters;
 
   const SummaryPage(
       {super.key,
       required this.marks,
       required this.skipped,
       required this.incorrect,
-      required this.questions});
+      required this.questions,
+      required this.chapters});
 
   @override
   State<SummaryPage> createState() => _SummaryPageState();
@@ -28,7 +31,7 @@ class _SummaryPageState extends State<SummaryPage>
   @override
   void initState() {
     super.initState();
-    _controller = ConfettiController(duration: const Duration(seconds: 5));
+    _controller = ConfettiController(duration: const Duration(seconds: 3));
     _startConfetti();
   }
 
@@ -429,6 +432,31 @@ class _SummaryPageState extends State<SummaryPage>
                       ),
                     ),
                   ),
+                  SizedBox(
+                    width: 0.8 * MediaQuery.of(context).size.width,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => ReviewPage(
+                                    chapters: widget.chapters,
+                                  )),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color.fromRGBO(90, 216, 224, 1),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        padding: EdgeInsets.zero,
+                      ),
+                      child: const Text(
+                        'REVIEW',
+                        style: TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 10),
                 ],
               ),
@@ -457,7 +485,7 @@ class _SummaryPageState extends State<SummaryPage>
 
   void _startConfetti() {
     _controller.play();
-    Future.delayed(const Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 3), () {
       if (mounted) {
         _controller.stop();
         setState(() {});

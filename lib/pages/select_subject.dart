@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:quizpage/quizpage.dart';
+
+import 'package:quizpage/pages/quizpage.dart';
 
 class SelectSubjectPage extends StatefulWidget {
   final String classSelected;
@@ -49,7 +50,8 @@ class _SelectClassPageState extends State<SelectSubjectPage> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => QuizPage(chapters: widget.subjects[index]['chapters']),
+                          builder: (context) => QuizPage(
+                              chapters: widget.subjects[index]['chapters']),
                         ));
                   },
                   title: Text(widget.subjects[index]['subject'].toString()),

@@ -1,11 +1,10 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:quizpage/data/questions.dart';
-import 'package:quizpage/optionsbutton.dart';
-import 'package:quizpage/other/submit_page.dart';
-import 'package:quizpage/other/submit_page2.dart';
-import 'package:quizpage/submit.dart';
-import 'package:quizpage/timer.dart';
+import 'package:quizpage/widgets/optionsbutton.dart';
+import 'package:quizpage/pages/submit_page.dart';
+import 'package:quizpage/pages/submit_page2.dart';
+import 'package:quizpage/widgets/submit.dart';
+import 'package:quizpage/widgets/timer.dart';
 
 class QuizPage extends StatefulWidget {
   final List chapters;
@@ -25,6 +24,8 @@ class _QuizPageState extends State<QuizPage> {
   int left = 0;
   int wrong = 0;
   late List<int> selectedOptionIndexes;
+  bool isTappedButton1 = false;
+  bool isTappedButton2 = false;
 
   @override
   void initState() {
@@ -97,6 +98,7 @@ class _QuizPageState extends State<QuizPage> {
             skipped: left,
             incorrect: wrong,
             questions: questions.length,
+            chapters: widget.chapters,
           ),
         ),
       );
@@ -169,6 +171,7 @@ class _QuizPageState extends State<QuizPage> {
                                 skipped: left,
                                 incorrect: wrong,
                                 questions: questions.length,
+                                chapters: widget.chapters,
                               ),
                             ),
                           );
@@ -217,18 +220,18 @@ class _QuizPageState extends State<QuizPage> {
                       decoration = BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: const Color.fromRGBO(73, 229, 234, 1.0),
+                          color: const Color.fromRGBO(96, 188, 250, 1.0),
                         ),
                       );
                       child = const Icon(
                         Icons.check,
-                        color: Color.fromRGBO(73, 229, 234, 1.0),
+                        color: Color.fromRGBO(96, 188, 250, 1.0),
                         size: 16,
                       );
                     } else if (isSelected) {
                       decoration = const BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color.fromRGBO(73, 229, 234, 1.0),
+                        color: Color.fromRGBO(96, 188, 250, 1.0),
                       );
                       child = Text(
                         '$number',
@@ -242,12 +245,12 @@ class _QuizPageState extends State<QuizPage> {
                       decoration = BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: const Color.fromRGBO(73, 229, 234, 1.0),
+                          color: const Color.fromRGBO(96, 188, 250, 1.0),
                         ),
                       );
                       child = const Icon(
                         Icons.check,
-                        color: Color.fromRGBO(73, 229, 234, 1.0),
+                        color: Color.fromRGBO(96, 188, 250, 1.0),
                         size: 16,
                       );
                     } else {
@@ -258,7 +261,7 @@ class _QuizPageState extends State<QuizPage> {
                       child = Text(
                         '$number',
                         style: const TextStyle(
-                          color: Color.fromRGBO(73, 229, 234, 1.0),
+                          color: Color.fromRGBO(96, 188, 250, 1.0),
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
                         ),
@@ -353,46 +356,61 @@ class _QuizPageState extends State<QuizPage> {
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               Row(
                 mainAxisAlignment: (selectedNumber == 1)
-                    ? MainAxisAlignment.end // Align to the right
+                    ? MainAxisAlignment.end
                     : MainAxisAlignment.start,
                 children: [
-                  if (selectedNumber >
-                      1) // Show the first GestureDetector only if selectedNumber > 1
+                  if (selectedNumber > 1)
                     Padding(
                       padding: EdgeInsets.only(
                           left: MediaQuery.of(context).size.width * 0.26),
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
+                            isTappedButton1 = true;
+                            isTappedButton2 = false;
                             selectedNumber--;
                           });
+                          Future.delayed(const Duration(milliseconds: 200), () {
+                            setState(() {
+                              isTappedButton1 = false;
+                            });
+                          });
                         },
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(seconds: 1),
                           width: MediaQuery.of(context).size.width * 0.15,
                           height: MediaQuery.of(context).size.width * 0.15,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: const Color.fromRGBO(196, 196, 196, 1),
+                              color: isTappedButton1
+                                  ? Colors.white
+                                  : const Color.fromRGBO(96, 188, 250, 1.0),
                               width: 1.0,
                             ),
+                            color: isTappedButton1
+                                ? const Color.fromRGBO(96, 188, 250, 1.0)
+                                : Colors.white,
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.keyboard_backspace,
-                            color: Color.fromRGBO(196, 196, 196, 1),
+                            color: isTappedButton1
+                                ? Colors.white
+                                : const Color.fromRGBO(96, 188, 250, 1.0),
                           ),
                         ),
                       ),
                     ),
                   SizedBox(width: MediaQuery.of(context).size.width * 0.08),
                   if (selectedNumber < questions.length)
-                    // Show the second GestureDetector only if selectedNumber < questions.length
                     Padding(
                       padding: EdgeInsets.only(
                           right: MediaQuery.of(context).size.width * 0.26),
                       child: GestureDetector(
                         onTap: () {
                           setState(() {
+                            isTappedButton1 = false;
+                            isTappedButton2 = true;
                             if (selectedOptionIndexes[selectedNumber] != -1) {
                               selectedNumber++;
                             } else {
@@ -400,22 +418,35 @@ class _QuizPageState extends State<QuizPage> {
                               selectedOptionIndexes[selectedNumber - 1] = -1;
                             }
                           });
+                          Future.delayed(const Duration(milliseconds: 200), () {
+                            setState(() {
+                              isTappedButton2 = false;
+                            });
+                          });
                         },
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(seconds: 1),
                           width: MediaQuery.of(context).size.width * 0.15,
                           height: MediaQuery.of(context).size.width * 0.15,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: const Color.fromRGBO(73, 229, 234, 1.0),
+                              color: isTappedButton2
+                                  ? Colors.white
+                                  : const Color.fromRGBO(96, 188, 250, 1.0),
                               width: 1.0,
                             ),
+                            color: isTappedButton2
+                                ? const Color.fromRGBO(96, 188, 250, 1.0)
+                                : Colors.white,
                           ),
                           child: Transform.rotate(
                             angle: 3.14,
-                            child: const Icon(
+                            child: Icon(
                               Icons.keyboard_backspace,
-                              color: Color.fromRGBO(73, 229, 234, 1.0),
+                              color: isTappedButton2
+                                  ? Colors.white
+                                  : const Color.fromRGBO(96, 188, 250, 1.0),
                             ),
                           ),
                         ),

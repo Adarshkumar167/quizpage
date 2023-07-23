@@ -28,9 +28,9 @@ class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
     Color containerColor =
-        isTapped ? const Color.fromRGBO(73, 229, 234, 1.0) : Colors.white;
+        isTapped ? const Color.fromRGBO(96, 188, 250, 1.0) : Colors.white;
     Color textColor =
-        isTapped ? Colors.white : const Color.fromRGBO(73, 229, 234, 1.0);
+        isTapped ? Colors.white : const Color.fromRGBO(96, 188, 250, 1.0);
 
     return GestureDetector(
       onTap: handleTap,
@@ -43,7 +43,7 @@ class _MyWidgetState extends State<MyWidget> {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: const Color.fromRGBO(73, 229, 234, 1.0),
+              color: const Color.fromRGBO(96, 188, 250, 1.0),
             ),
             color: containerColor,
           ),

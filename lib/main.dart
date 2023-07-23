@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:quizpage/start.dart';
+import 'package:quizpage/pages/start.dart';
 
 void main() {
   runApp(const MyApp());

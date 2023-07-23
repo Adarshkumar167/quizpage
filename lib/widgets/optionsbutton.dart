@@ -19,18 +19,6 @@ class CustomOutlinedButton extends StatefulWidget {
 }
 
 class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
-  String get iconPath {
-    if (widget.isSelected) {
-      if (widget.isCorrect) {
-        return 'assets/image/options/correctans.png';
-      } else {
-        return 'assets/image/options/wrongans.png';
-      }
-    } else {
-      return 'assets/image/options/startans.png';
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     Color borderColor = Colors.black;
@@ -38,15 +26,8 @@ class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
     Color textColor = Colors.black;
 
     if (widget.isSelected) {
-      if (widget.isCorrect) {
-        borderColor = const Color.fromRGBO(73, 234, 118, 1.0);
-        backgroundColor = const Color.fromRGBO(73, 234, 118, 1.0);
-        textColor = Colors.white;
-      } else {
-        borderColor = const Color.fromRGBO(234, 73, 73, 1.0);
-        backgroundColor = const Color.fromRGBO(234, 73, 73, 1.0);
-        textColor = Colors.white;
-      }
+      backgroundColor = const Color.fromRGBO(96, 188, 250, 1.0);
+      textColor = Colors.white;
     }
 
     return SizedBox(
@@ -63,7 +44,7 @@ class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
               ),
               child: SizedBox(
                 child: Image.asset(
-                  iconPath,
+                  'assets/image/options/startans.png',
                 ),
               ),
             ),
