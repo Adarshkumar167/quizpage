@@ -99,6 +99,7 @@ class _QuizPageState extends State<QuizPage> {
             incorrect: wrong,
             questions: questions.length,
             chapters: widget.chapters,
+            selectedOptionIndex: selectedOptionIndexes,
           ),
         ),
       );
@@ -172,6 +173,7 @@ class _QuizPageState extends State<QuizPage> {
                                 incorrect: wrong,
                                 questions: questions.length,
                                 chapters: widget.chapters,
+                                selectedOptionIndex: selectedOptionIndexes,
                               ),
                             ),
                           );

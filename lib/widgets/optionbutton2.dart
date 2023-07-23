@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 class CustomOutlinedButton2 extends StatefulWidget {
   final String text;
-  final Function(String) onPressed;
   final bool isCorrect;
   final bool isSelected;
 
   const CustomOutlinedButton2({
     Key? key,
     required this.text,
-    required this.onPressed,
     this.isCorrect = false,
     this.isSelected = false,
   }) : super(key: key);
@@ -20,15 +18,15 @@ class CustomOutlinedButton2 extends StatefulWidget {
 
 class _CustomOutlinedButton2State extends State<CustomOutlinedButton2> {
   String get iconPath {
+    if (widget.isCorrect) {
+      return 'assets/image/options/correctans.png';
+    }
     if (widget.isSelected) {
-      if (widget.isCorrect) {
-        return 'assets/image/options/correctans.png';
-      } else {
+      if (!widget.isCorrect) {
         return 'assets/image/options/wrongans.png';
       }
-    } else {
-      return 'assets/image/options/startans.png';
     }
+    return 'assets/image/options/startans.png';
   }
 
   @override
@@ -37,12 +35,14 @@ class _CustomOutlinedButton2State extends State<CustomOutlinedButton2> {
     Color backgroundColor = Colors.white;
     Color textColor = Colors.black;
 
+    if (widget.isCorrect) {
+      borderColor = const Color.fromRGBO(73, 234, 118, 1.0);
+      backgroundColor = const Color.fromRGBO(73, 234, 118, 1.0);
+      textColor = Colors.white;
+    }
+
     if (widget.isSelected) {
-      if (widget.isCorrect) {
-        borderColor = const Color.fromRGBO(73, 234, 118, 1.0);
-        backgroundColor = const Color.fromRGBO(73, 234, 118, 1.0);
-        textColor = Colors.white;
-      } else {
+      if (!widget.isCorrect) {
         borderColor = const Color.fromRGBO(234, 73, 73, 1.0);
         backgroundColor = const Color.fromRGBO(234, 73, 73, 1.0);
         textColor = Colors.white;
@@ -72,11 +72,7 @@ class _CustomOutlinedButton2State extends State<CustomOutlinedButton2> {
             height: MediaQuery.of(context).size.height * 0.06,
             width: MediaQuery.of(context).size.width * 0.7,
             child: OutlinedButton(
-              onPressed: () {
-                if (!widget.isSelected) {
-                  widget.onPressed(widget.text.substring(3));
-                }
-              },
+              onPressed: () {},
               style: ButtonStyle(
                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(

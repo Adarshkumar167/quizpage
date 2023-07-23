@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:quizpage/data/questions.dart';
 import 'package:quizpage/widgets/optionbutton2.dart';
-import 'package:quizpage/pages/submit_page.dart';
-import 'package:quizpage/pages/submit_page2.dart';
 
 class ReviewPage extends StatefulWidget {
   final List chapters;
+  final List<int> selectedOptionIndexes;
+
   const ReviewPage({
     Key? key,
     required this.chapters,
+    required this.selectedOptionIndexes,
   }) : super(key: key);
 
   @override
@@ -18,15 +19,13 @@ class ReviewPage extends StatefulWidget {
 class _ReviewPageState extends State<ReviewPage> {
   int selectedNumber = 1;
   List questions = [];
-  int score = 0;
-  int left = 0;
-  int wrong = 0;
   late List<int> selectedOptionIndexes;
   bool isTappedButton1 = false;
   bool isTappedButton2 = false;
 
   @override
   void initState() {
+    selectedOptionIndexes = List<int>.from(widget.selectedOptionIndexes);
     addDataToQuestions();
     super.initState();
   }
@@ -45,61 +44,6 @@ class _ReviewPageState extends State<ReviewPage> {
           ],
           correctAnswer: element['Answer'].toString()));
       id++;
-    }
-    selectedOptionIndexes = List<int>.filled(questions.length, -1);
-  }
-
-  void calculateScore() {
-    score = 0;
-    left = 0;
-    wrong = 0;
-    for (int i = 0; i < selectedOptionIndexes.length; i++) {
-      if (selectedOptionIndexes[i] != -1 &&
-          questions[i].options[selectedOptionIndexes[i]] ==
-              questions[i].correctAnswer) {
-        score++;
-      }
-      if (selectedOptionIndexes[i] == -1) left++;
-      if (selectedOptionIndexes[i] != -1 &&
-          questions[i].options[selectedOptionIndexes[i]] !=
-              questions[i].correctAnswer) {
-        wrong++;
-      }
-    }
-  }
-
-  void handleTimerExpired() {
-    calculateScore();
-    double correctness = (score / questions.length) * 100;
-
-    if (correctness < 40) {
-      Navigator.pop(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SummaryPage2(
-            chapters: widget.chapters,
-            marks: score,
-            skipped: left,
-            incorrect: wrong,
-            questions: questions.length,
-          ),
-        ),
-      );
-    } else {
-      Navigator.pop(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => SummaryPage(
-            marks: score,
-            skipped: left,
-            incorrect: wrong,
-            questions: questions.length,
-            chapters: widget.chapters,
-          ),
-        ),
-      );
     }
   }
 
@@ -140,8 +84,7 @@ class _ReviewPageState extends State<ReviewPage> {
                     BoxDecoration decoration;
                     Widget child;
 
-                    bool isMarked =
-                        isSelected && selectedOptionIndexes[number - 1] != -1;
+                    bool isMarked = selectedOptionIndexes[number - 1] != -1;
                     if (isMarked) {
                       decoration = BoxDecoration(
                         shape: BoxShape.circle,
@@ -232,7 +175,6 @@ class _ReviewPageState extends State<ReviewPage> {
                 children: [
                   CustomOutlinedButton2(
                     text: 'A. ${questions[selectedNumber - 1].options[0]}',
-                    onPressed: (option) {},
                     isCorrect: questions[selectedNumber - 1].options[0] ==
                         questions[selectedNumber - 1].correctAnswer,
                     isSelected: selectedOptionIndexes[selectedNumber - 1] == 0,
@@ -240,7 +182,6 @@ class _ReviewPageState extends State<ReviewPage> {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   CustomOutlinedButton2(
                     text: 'B. ${questions[selectedNumber - 1].options[1]}',
-                    onPressed: (option) {},
                     isCorrect: questions[selectedNumber - 1].options[1] ==
                         questions[selectedNumber - 1].correctAnswer,
                     isSelected: selectedOptionIndexes[selectedNumber - 1] == 1,
@@ -248,7 +189,6 @@ class _ReviewPageState extends State<ReviewPage> {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   CustomOutlinedButton2(
                     text: 'C. ${questions[selectedNumber - 1].options[2]}',
-                    onPressed: (option) {},
                     isCorrect: questions[selectedNumber - 1].options[2] ==
                         questions[selectedNumber - 1].correctAnswer,
                     isSelected: selectedOptionIndexes[selectedNumber - 1] == 2,
@@ -256,7 +196,6 @@ class _ReviewPageState extends State<ReviewPage> {
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   CustomOutlinedButton2(
                     text: 'D. ${questions[selectedNumber - 1].options[3]}',
-                    onPressed: (option) {},
                     isCorrect: questions[selectedNumber - 1].options[3] ==
                         questions[selectedNumber - 1].correctAnswer,
                     isSelected: selectedOptionIndexes[selectedNumber - 1] == 3,
