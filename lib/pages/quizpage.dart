@@ -7,11 +7,7 @@ import 'package:quizpage/widgets/submit.dart';
 import 'package:quizpage/widgets/timer.dart';
 
 class QuizPage extends StatefulWidget {
-  final List chapters;
-  const QuizPage({
-    Key? key,
-    required this.chapters,
-  }) : super(key: key);
+  const QuizPage({Key? key}) : super(key: key);
 
   @override
   State<QuizPage> createState() => _QuizPageState();
@@ -19,37 +15,12 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   int selectedNumber = 1;
-  List questions = [];
+  List<int> selectedOptionIndexes = List<int>.filled(questions.length, -1);
   int score = 0;
   int left = 0;
   int wrong = 0;
-  late List<int> selectedOptionIndexes;
   bool isTappedButton1 = false;
   bool isTappedButton2 = false;
-
-  @override
-  void initState() {
-    addDataToQuestions();
-    super.initState();
-  }
-
-  void addDataToQuestions() {
-    int id = 1;
-    for (var element in widget.chapters) {
-      questions.add(Question(
-          id: id,
-          question: element['Question'],
-          options: [
-            element['Option 1'].toString(),
-            element['Option 2'].toString(),
-            element['Option 3'].toString(),
-            element['Option 4'].toString()
-          ],
-          correctAnswer: element['Answer'].toString()));
-      id++;
-    }
-    selectedOptionIndexes = List<int>.filled(questions.length, -1);
-  }
 
   void calculateScore() {
     score = 0;
@@ -80,7 +51,6 @@ class _QuizPageState extends State<QuizPage> {
         context,
         MaterialPageRoute(
           builder: (context) => SummaryPage2(
-            chapters: widget.chapters,
             marks: score,
             skipped: left,
             incorrect: wrong,
@@ -98,7 +68,6 @@ class _QuizPageState extends State<QuizPage> {
             skipped: left,
             incorrect: wrong,
             questions: questions.length,
-            chapters: widget.chapters,
             selectedOptionIndex: selectedOptionIndexes,
           ),
         ),
@@ -154,7 +123,6 @@ class _QuizPageState extends State<QuizPage> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => SummaryPage2(
-                                chapters: widget.chapters,
                                 marks: score,
                                 skipped: left,
                                 incorrect: wrong,
@@ -172,7 +140,6 @@ class _QuizPageState extends State<QuizPage> {
                                 skipped: left,
                                 incorrect: wrong,
                                 questions: questions.length,
-                                chapters: widget.chapters,
                                 selectedOptionIndex: selectedOptionIndexes,
                               ),
                             ),

@@ -7,16 +7,12 @@ class SummaryPage2 extends StatefulWidget {
   final int skipped;
   final int incorrect;
   final int questions;
-  final List chapters;
-  const SummaryPage2({
-    Key? key,
-    required this.marks,
-    required this.skipped,
-    required this.incorrect,
-    required this.questions,
-    required this.chapters,
-  }) : super(key: key);
-
+  const SummaryPage2(
+      {super.key,
+      required this.marks,
+      required this.skipped,
+      required this.incorrect,
+      required this.questions});
   @override
   State<SummaryPage2> createState() => _SummaryPage2State();
 }
@@ -118,11 +114,7 @@ class _SummaryPage2State extends State<SummaryPage2>
                     Navigator.pop(context);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => QuizPage(
-                          chapters: widget.chapters,
-                        ),
-                      ),
+                      MaterialPageRoute(builder: (context) => const QuizPage()),
                     );
                   },
                   style: ElevatedButton.styleFrom(

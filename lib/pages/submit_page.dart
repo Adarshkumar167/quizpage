@@ -10,7 +10,6 @@ class SummaryPage extends StatefulWidget {
   final int skipped;
   final int incorrect;
   final int questions;
-  final List chapters;
   final List<int> selectedOptionIndex;
 
   const SummaryPage(
@@ -19,7 +18,6 @@ class SummaryPage extends StatefulWidget {
       required this.skipped,
       required this.incorrect,
       required this.questions,
-      required this.chapters,
       required this.selectedOptionIndex});
 
   @override
@@ -442,7 +440,6 @@ class _SummaryPageState extends State<SummaryPage>
                           context,
                           MaterialPageRoute(
                               builder: (context) => ReviewPage(
-                                    chapters: widget.chapters,
                                     selectedOptionIndexes:
                                         widget.selectedOptionIndex,
                                   )),

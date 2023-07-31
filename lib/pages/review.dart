@@ -3,12 +3,10 @@ import 'package:quizpage/data/questions.dart';
 import 'package:quizpage/widgets/optionbutton2.dart';
 
 class ReviewPage extends StatefulWidget {
-  final List chapters;
   final List<int> selectedOptionIndexes;
 
   const ReviewPage({
     Key? key,
-    required this.chapters,
     required this.selectedOptionIndexes,
   }) : super(key: key);
 
@@ -18,33 +16,14 @@ class ReviewPage extends StatefulWidget {
 
 class _ReviewPageState extends State<ReviewPage> {
   int selectedNumber = 1;
-  List questions = [];
-  late List<int> selectedOptionIndexes;
+  List<int> selectedOptionIndexes = [];
   bool isTappedButton1 = false;
   bool isTappedButton2 = false;
 
   @override
   void initState() {
-    selectedOptionIndexes = List<int>.from(widget.selectedOptionIndexes);
-    addDataToQuestions();
     super.initState();
-  }
-
-  void addDataToQuestions() {
-    int id = 1;
-    for (var element in widget.chapters) {
-      questions.add(Question(
-          id: id,
-          question: element['Question'],
-          options: [
-            element['Option 1'].toString(),
-            element['Option 2'].toString(),
-            element['Option 3'].toString(),
-            element['Option 4'].toString()
-          ],
-          correctAnswer: element['Answer'].toString()));
-      id++;
-    }
+    selectedOptionIndexes = widget.selectedOptionIndexes;
   }
 
   @override
