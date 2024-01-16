@@ -27,7 +27,6 @@ class SummaryPage extends StatefulWidget {
 class _SummaryPageState extends State<SummaryPage>
     with TickerProviderStateMixin {
   late ConfettiController _controller;
-
   @override
   void initState() {
     super.initState();

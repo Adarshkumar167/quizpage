@@ -28,12 +28,7 @@ final List<Question> questions = [
   Question(
     id: 2,
     question: 'Which is the tallest building on the Earth?',
-    options: [
-      'Burj Khalifa',
-      'Shanghai Tower',
-      'Merdeka',
-      'Lotte World Tower',
-    ],
+    options: ['Burj Khalifa', 'Shanghai Tower', 'World One', 'Empire State'],
     correctAnswer: 'Burj Khalifa',
   ),
   Question(

@@ -16,6 +16,7 @@ class QuizPage extends StatefulWidget {
 class _QuizPageState extends State<QuizPage> {
   int selectedNumber = 1;
   List<int> selectedOptionIndexes = List<int>.filled(questions.length, -1);
+
   int score = 0;
   int left = 0;
   int wrong = 0;
@@ -270,57 +271,23 @@ class _QuizPageState extends State<QuizPage> {
                 ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomOutlinedButton(
-                    text: 'A. ${questions[selectedNumber - 1].options[0]}',
+              SizedBox(
+                height: 300,
+                child: ListView.builder(
+                  itemCount: questions[selectedNumber - 1].options.length,
+                  itemBuilder: (context, index) => CustomOutlinedButton(
+                    text: questions[selectedNumber - 1].options[index],
                     onPressed: (option) {
                       setState(() {
-                        selectedOptionIndexes[selectedNumber - 1] = 0;
+                        selectedOptionIndexes[selectedNumber - 1] = index;
                       });
                     },
-                    isCorrect: questions[selectedNumber - 1].options[0] ==
+                    isCorrect: questions[selectedNumber - 1].options[index] ==
                         questions[selectedNumber - 1].correctAnswer,
-                    isSelected: selectedOptionIndexes[selectedNumber - 1] == 0,
+                    isSelected:
+                        selectedOptionIndexes[selectedNumber - 1] == index,
                   ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                  CustomOutlinedButton(
-                    text: 'B. ${questions[selectedNumber - 1].options[1]}',
-                    onPressed: (option) {
-                      setState(() {
-                        selectedOptionIndexes[selectedNumber - 1] = 1;
-                      });
-                    },
-                    isCorrect: questions[selectedNumber - 1].options[1] ==
-                        questions[selectedNumber - 1].correctAnswer,
-                    isSelected: selectedOptionIndexes[selectedNumber - 1] == 1,
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                  CustomOutlinedButton(
-                    text: 'C. ${questions[selectedNumber - 1].options[2]}',
-                    onPressed: (option) {
-                      setState(() {
-                        selectedOptionIndexes[selectedNumber - 1] = 2;
-                      });
-                    },
-                    isCorrect: questions[selectedNumber - 1].options[2] ==
-                        questions[selectedNumber - 1].correctAnswer,
-                    isSelected: selectedOptionIndexes[selectedNumber - 1] == 2,
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height * 0.02),
-                  CustomOutlinedButton(
-                    text: 'D. ${questions[selectedNumber - 1].options[3]}',
-                    onPressed: (option) {
-                      setState(() {
-                        selectedOptionIndexes[selectedNumber - 1] = 3;
-                      });
-                    },
-                    isCorrect: questions[selectedNumber - 1].options[3] ==
-                        questions[selectedNumber - 1].correctAnswer,
-                    isSelected: selectedOptionIndexes[selectedNumber - 1] == 3,
-                  ),
-                ],
+                ),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               Row(
