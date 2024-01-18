@@ -51,12 +51,7 @@ class _QuizPageState extends State<QuizPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SummaryPage2(
-            marks: score,
-            skipped: left,
-            incorrect: wrong,
-            questions: questions.length,
-          ),
+          builder: (context) => const SummaryPage2(),
         ),
       );
     } else {
@@ -123,12 +118,7 @@ class _QuizPageState extends State<QuizPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SummaryPage2(
-                                marks: score,
-                                skipped: left,
-                                incorrect: wrong,
-                                questions: questions.length,
-                              ),
+                              builder: (context) => const SummaryPage2(),
                             ),
                           );
                         } else {
@@ -252,6 +242,7 @@ class _QuizPageState extends State<QuizPage> {
               SizedBox(
                 height: MediaQuery.of(context).size.height * 0.1,
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       '${questions[selectedNumber - 1].id}.',
@@ -259,6 +250,14 @@ class _QuizPageState extends State<QuizPage> {
                         fontSize: 24,
                         fontWeight: FontWeight.w500,
                       ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedOptionIndexes[selectedNumber - 1] = -1;
+                        });
+                      },
+                      child: const Text('CLEAR'),
                     ),
                   ],
                 ),

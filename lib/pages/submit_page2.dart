@@ -3,31 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:quizpage/pages/quizpage.dart';
 
 class SummaryPage2 extends StatefulWidget {
-  final int marks;
-  final int skipped;
-  final int incorrect;
-  final int questions;
-  const SummaryPage2(
-      {super.key,
-      required this.marks,
-      required this.skipped,
-      required this.incorrect,
-      required this.questions});
+  const SummaryPage2({super.key});
   @override
   State<SummaryPage2> createState() => _SummaryPage2State();
 }
 
-class _SummaryPage2State extends State<SummaryPage2>
-    with TickerProviderStateMixin {
-  int total(int marks) {
-    double correctness = ((marks / widget.questions) * 100);
-    if (correctness < 40) {
-      return 3;
-    } else {
-      return 0;
-    }
-  }
-
+class _SummaryPage2State extends State<SummaryPage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
