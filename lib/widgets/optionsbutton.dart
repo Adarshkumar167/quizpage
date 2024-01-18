@@ -55,7 +55,7 @@ class _CustomOutlinedButtonState extends State<CustomOutlinedButton> {
             child: OutlinedButton(
               onPressed: () {
                 if (!widget.isSelected) {
-                  widget.onPressed(widget.text.substring(3));
+                  widget.onPressed(widget.text);
                 }
               },
               style: ButtonStyle(

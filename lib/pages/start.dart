@@ -25,80 +25,82 @@ class _StartPageState extends State<StartPage> {
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: MediaQuery.of(context).size.width * 0.1),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        const Text(
-                          'QUIZE',
-                          style: TextStyle(
-                            fontSize: 36,
-                            fontWeight: FontWeight.bold,
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: MediaQuery.of(context).size.width * 0.1),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const Text(
+                            'QUIZE',
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Transform.translate(
+                            offset: const Offset(-50, -25),
+                            child: Image.asset(
+                              'assets/image/starting_page/crown.png',
+                              width: 30,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Join our daily challenge and win special gifts just for you',
+                        style: TextStyle(
+                            fontSize: 14,
                             color: Colors.white,
-                          ),
-                        ),
-                        Transform.translate(
-                          offset: const Offset(-50, -25),
-                          child: Image.asset(
-                            'assets/image/starting_page/crown.png',
-                            width: 30,
-                          ),
-                        ),
-                      ],
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Image.asset(
+                  'assets/image/starting_page/quizicon.png',
+                  width: MediaQuery.of(context).size.width * 0.6,
+                ),
+                const SizedBox(height: 120),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const QuizPage()),
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 5,
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Join our daily challenge and win special gifts just for you',
+                    child: const Text(
+                      'Play',
                       style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 40),
-              Image.asset(
-                'assets/image/starting_page/quizicon.png',
-                width: MediaQuery.of(context).size.width * 0.6,
-              ),
-              const SizedBox(height: 120),
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.6,
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => const QuizPage()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    elevation: 5,
-                    backgroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Play',
-                    style: TextStyle(
-                      color: Color.fromRGBO(87, 87, 87, 1),
-                      fontSize: 24,
-                      fontWeight: FontWeight.w600,
+                        color: Color.fromRGBO(87, 87, 87, 1),
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
